@@ -1,6 +1,7 @@
-# mi-primer-Readme
-Practicando la vara para ser todo un crack  
-Practicando esta a ver si funciona  
-Oh my tux  
-Estoy volando
-Ya soy parte del repo
+#GRUPO # 2
+#INTEGRANTES:
+#Rolando Arauz Gonzalez
+#Carlos Barboza Hernandez
+#Ariana Maria Chaves Monge
+#Leslie Jimena Nuñez Nuñez
+#Erson Segura Flores
