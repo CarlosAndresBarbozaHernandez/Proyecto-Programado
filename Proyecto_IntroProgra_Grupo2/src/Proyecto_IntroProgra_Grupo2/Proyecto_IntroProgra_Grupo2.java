@@ -19,6 +19,9 @@ public class Proyecto_IntroProgra_Grupo2 {
         System.out.println("Hola Mundo");
 
         System.out.println("Hola mi gente");
+
+        System.out.println("Hola Rolando");
+
     }
     
 }
