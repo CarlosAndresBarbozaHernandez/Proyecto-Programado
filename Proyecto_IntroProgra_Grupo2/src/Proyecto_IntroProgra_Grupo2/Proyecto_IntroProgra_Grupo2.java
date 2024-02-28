@@ -4,24 +4,13 @@
  */
 package Proyecto_IntroProgra_Grupo2;
 
-/**
- *
- * @author tloz
- */
 public class Proyecto_IntroProgra_Grupo2 {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         
+        Cancion Cancion1 = new Cancion("nombre", "artista", "Album");
         
-        System.out.println("Hola Mundo");
-
-        System.out.println("Hola mi gente");
-
-        System.out.println("Hola Rolando");
-
+        
     }
     
 }
