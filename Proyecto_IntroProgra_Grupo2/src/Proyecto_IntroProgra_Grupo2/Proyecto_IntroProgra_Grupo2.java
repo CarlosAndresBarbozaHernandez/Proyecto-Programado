@@ -8,7 +8,7 @@ public class Proyecto_IntroProgra_Grupo2 {
 
     public static void main(String[] args) {
         
-        Cancion Cancion1 = new Cancion("nombre", "artista", "Album");
+        Cancion Cancion1 = new Cancion("nombre", "artista", "Album","");
         
         InterfazGrafica reproductor = new InterfazGrafica();
         

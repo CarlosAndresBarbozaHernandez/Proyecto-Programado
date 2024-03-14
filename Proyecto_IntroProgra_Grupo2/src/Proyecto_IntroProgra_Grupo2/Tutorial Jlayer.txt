@@ -1,0 +1,11 @@
+Primero que todo hay que descargarse la libreria jlayer
+el enlace es este: https://jar-download.com/artifacts/javazoom
+
+1. Despues lo descomprimen y se van al netbeans
+2. Se van a la parte de "Tools" y le dan click donde dice "Libraries"
+3. Le dan click donde dice "New Library", hay le ponen exactamente el mismo nombre del archivito .jar que descomprimieron y le dan en ok
+4. Cierran esa ventana dandole "ok"
+5. Abren el proyecto de progra y hay va a ver una carpeta que se llama "Libraries"
+6. Le dan click derecho y luego en "Add Library"
+7. Hay buscan la libreria que agregaron en el paso 3 y le dan click donde dice "Add Library"
+8. Con eso ya van a poder usar la libreria "jlayer" para reproducir archivos .mp3
