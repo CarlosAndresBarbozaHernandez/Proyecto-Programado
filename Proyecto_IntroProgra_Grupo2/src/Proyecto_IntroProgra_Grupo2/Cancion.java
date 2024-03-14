@@ -9,11 +9,14 @@ public class Cancion {
     // estos son los Atributos
     private String nombre, artista, Album;
 
-    public Cancion(String nombre, String artista, String Album) {
+    public Cancion(String nombre, String artista, String Album, String rutaDeLaCancion) {
         this.nombre = nombre;
         this.artista = artista;
         this.Album = Album;
+        
     }
+    
+    
     
     public String getNombre() {
         return nombre;

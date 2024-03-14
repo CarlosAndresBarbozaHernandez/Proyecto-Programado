@@ -10,6 +10,8 @@ public class Proyecto_IntroProgra_Grupo2 {
         
         Cancion Cancion1 = new Cancion("nombre", "artista", "Album");
         
+        InterfazGrafica reproductor = new InterfazGrafica();
+        
         //Primer commit
         
         //Aprendiendo con Ari a hacer un commit
