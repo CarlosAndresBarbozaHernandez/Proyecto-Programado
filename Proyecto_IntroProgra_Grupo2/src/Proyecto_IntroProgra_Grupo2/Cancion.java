@@ -6,18 +6,19 @@ package Proyecto_IntroProgra_Grupo2;
 
 public class Cancion {
       
-    // estos son los Atributos
-    private String nombre, artista, Album;
+    //Atributos
+    private String nombre, artista, album;
 
-    public Cancion(String nombre, String artista, String Album, String rutaDeLaCancion) {
+    //Constructor
+
+    public Cancion(String nombre, String artista, String album) {
         this.nombre = nombre;
         this.artista = artista;
-        this.Album = Album;
-        
+        this.album = album;        
     }
-    
-    
-    
+        
+    //Setters and Getters
+
     public String getNombre() {
         return nombre;
     }
@@ -35,13 +36,11 @@ public class Cancion {
     }
 
     public String getAlbum() {
-        return Album;
+        return album;
     }
 
-    public void setAlbum(String Album) {
-        this.Album = Album;
+    public void setAlbum(String album) {
+        this.album = album;
     }
     
-    
-
 }

@@ -4,6 +4,10 @@
  */
 package Proyecto_IntroProgra_Grupo2;
 
+import java.awt.event.ActionEvent;
+import java.io.File;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author charlie
@@ -13,10 +17,9 @@ public class InterfazGrafica extends javax.swing.JFrame {
     /**
      * Creates new form InterfazGrafica
      */
-    
     public InterfazGrafica() {
         initComponents();
-        
+
         //Comando para centrar la interfaz cuando se ejecute el programa
         setLocationRelativeTo(null);
     }
@@ -101,6 +104,11 @@ public class InterfazGrafica extends javax.swing.JFrame {
         botonEliminarPlaylist.setText("Eliminar");
 
         botonAgregarPlaylist.setText("Agregar");
+        botonAgregarPlaylist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAgregarPlaylistActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
         panelPrincipal.setLayout(panelPrincipalLayout);
@@ -192,6 +200,27 @@ public class InterfazGrafica extends javax.swing.JFrame {
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_botonBuscarActionPerformed
+
+    private void botonAgregarPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarPlaylistActionPerformed
+
+        // Crear un JFileChooser
+        JFileChooser fileChooserAgregarPlaylist = new JFileChooser();
+
+        // Mostrar el diálogo de selección de archivo
+        int result = fileChooserAgregarPlaylist.showOpenDialog(null);
+
+        // Si el usuario elige un archivo, obtener su ruta
+        if (result == JFileChooser.APPROVE_OPTION) {
+            
+            File selectedFile = fileChooserAgregarPlaylist.getSelectedFile();
+            
+            String rutaDeLaCancion = selectedFile.getAbsolutePath();
+            
+            System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
+            
+        }
+
+    }//GEN-LAST:event_botonAgregarPlaylistActionPerformed
 
     /**
      * @param args the command line arguments
