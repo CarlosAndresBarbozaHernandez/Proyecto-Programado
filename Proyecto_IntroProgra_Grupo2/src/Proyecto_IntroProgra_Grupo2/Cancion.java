@@ -5,20 +5,19 @@
 package Proyecto_IntroProgra_Grupo2;
 
 public class Cancion {
-      
-    //Atributos
-    private String nombre, artista, album;
 
-    //Constructor
+    // Atributos
+    private String nombre, artista, album, rutaCancion;
 
-    public Cancion(String nombre, String artista, String album) {
+    // Constructor
+    public Cancion(String nombre, String artista, String album, String rutaCancion) {
         this.nombre = nombre;
         this.artista = artista;
-        this.album = album;        
+        this.album = album;
+        this.rutaCancion = rutaCancion;
     }
-        
-    //Setters and Getters
 
+    // Setters and Getters
     public String getNombre() {
         return nombre;
     }
@@ -42,5 +41,13 @@ public class Cancion {
     public void setAlbum(String album) {
         this.album = album;
     }
-    
+
+    public String getRutaCancion() {
+        return rutaCancion;
+    }
+
+    public void setRutaCancion(String rutaCancion) {
+        this.rutaCancion = rutaCancion;
+    }
+
 }
