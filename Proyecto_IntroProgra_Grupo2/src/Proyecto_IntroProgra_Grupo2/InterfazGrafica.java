@@ -10,6 +10,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
 
 /**
  *
@@ -19,6 +25,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
 
     private int contadorPlaylists = 0; // Contador de playlists creadas
     private Playlist[] playlists = new Playlist[3]; // Array para almacenar las playlists creadas
+    private Player player;
 
     public InterfazGrafica() {
         initComponents();
@@ -71,7 +78,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         textoPlaylist.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-        textoPlaylist.setText("Playlist");
+        textoPlaylist.setText("Playlist general");
 
         botonRetrocederCancion.setText("Retroceder");
 
@@ -117,11 +124,11 @@ public class InterfazGrafica extends javax.swing.JFrame {
 
         botonEliminarCancion.setText("Eliminar");
 
-        botonAgregarCancion.setText("Agregar");
+        botonAgregarCancion.setText("Agregar Cancion");
 
         botonEliminarPlaylist.setText("Eliminar");
 
-        botonAgregarPlaylist.setText("Agregar");
+        botonAgregarPlaylist.setText("Agregar Playlist");
         botonAgregarPlaylist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonAgregarPlaylistActionPerformed(evt);
@@ -143,26 +150,30 @@ public class InterfazGrafica extends javax.swing.JFrame {
                                 .addComponent(botonPausarReproducirCancion))
                             .addComponent(textoPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(panelPrincipalLayout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelPrincipalLayout.createSequentialGroup()
                                     .addComponent(botonEliminarCancion)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(botonAgregarCancion))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(botonAgregarCancion, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(botonSiguienteCancion)
-                            .addComponent(textoPlaylistCreadas, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipalLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(botonAgregarPlaylist))
+                            .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(panelPrincipalLayout.createSequentialGroup()
-                                    .addComponent(botonEliminarPlaylist)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(botonAgregarPlaylist))
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGap(18, 18, 18)
+                                    .addComponent(botonSiguienteCancion))
+                                .addGroup(panelPrincipalLayout.createSequentialGroup()
+                                    .addGap(104, 104, 104)
+                                    .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(textoPlaylistCreadas, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(botonEliminarPlaylist)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                     .addGroup(panelPrincipalLayout.createSequentialGroup()
                         .addComponent(jTextFieldBarraDeBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(botonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         panelPrincipalLayout.setVerticalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,7 +208,9 @@ public class InterfazGrafica extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,7 +237,9 @@ public class InterfazGrafica extends javax.swing.JFrame {
         if (contadorPlaylists < 3) {// Verifica si ya se han creado tres playlists            
 
             String nombrePlaylist = JOptionPane.showInputDialog("Ingrese el nombre de la playlist:");
-            Playlist nuevaPlaylist = new Playlist(nombrePlaylist, 4);
+            
+            Playlist nuevaPlaylist = new Playlist(nombrePlaylist, 3);
+            
             playlists[contadorPlaylists] = nuevaPlaylist; // Almacena la playlist en el array
 
             String titulo = JOptionPane.showInputDialog("Ingrese el título de la canción:");
@@ -232,9 +247,11 @@ public class InterfazGrafica extends javax.swing.JFrame {
             String album = JOptionPane.showInputDialog("Ingrese el álbum de la canción:");
 
             JFileChooser fileChooserAgregarPlaylist = new JFileChooser();
+            
             int result = fileChooserAgregarPlaylist.showOpenDialog(null);
 
             if (result == JFileChooser.APPROVE_OPTION) {
+                
                 File selectedFile = fileChooserAgregarPlaylist.getSelectedFile();
                 String rutaDeLaCancion = selectedFile.getAbsolutePath();
 
@@ -265,21 +282,28 @@ public class InterfazGrafica extends javax.swing.JFrame {
             int index = jListPlaylistCreadas.getSelectedIndex();
             // Verificar si el índice es válido y reproducir la playlist correspondiente
             if (index != -1 && playlists[index] != null) {
-                reproducirPlaylist(playlists[index]);
+                try {
+                    reproducirPlaylist(playlists[index]);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(InterfazGrafica.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (JavaLayerException ex) {
+                    Logger.getLogger(InterfazGrafica.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 
 
     }//GEN-LAST:event_jListPlaylistCreadasMouseClicked
 
-    private void reproducirPlaylist(Playlist playlist) {
+    private void reproducirPlaylist(Playlist playlist) throws FileNotFoundException, JavaLayerException {
         // Obtener la lista de canciones de la playlist
         Cancion[] canciones = playlist.getPlaylist();
         // Recorrer la lista de canciones y reproducirlas una por una
         for (Cancion cancion : canciones) {
             if (cancion != null) {
-                // Aquí debes implementar el código para reproducir la canción utilizando la librería jlayer
-                // player.play(cancion.getRutaCancion()); // Suponiendo que player es una instancia de Player
+                // Crear una instancia de Player con la ruta de la canción actual
+                    player = new Player(new FileInputStream(cancion.getRutaCancion()));
+                    player.play(); // Reproducir la canción
                 // Nota: Debes tener en cuenta cómo gestionar la reproducción de múltiples canciones de forma secuencial o simultánea según tu requerimiento.
             }
         }

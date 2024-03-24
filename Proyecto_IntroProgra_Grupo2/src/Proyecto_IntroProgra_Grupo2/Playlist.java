@@ -55,12 +55,17 @@ public class Playlist {
     
     // Método para agregar una canción a la playlist
     public void agregarCancion(String nombre, String artista, String album, String rutaCancion) {
+        
         if (indice < playlist.length) {
+            
             playlist[indice] = new Cancion(nombre, artista, album, rutaCancion);
             indice++;
             JOptionPane.showMessageDialog(null, "La canción se agregó correctamente a la playlist.");
+            
         } else {
+            
             JOptionPane.showMessageDialog(null, "La playlist está llena. No se pueden agregar más canciones.");
+            
         }
     }
    
