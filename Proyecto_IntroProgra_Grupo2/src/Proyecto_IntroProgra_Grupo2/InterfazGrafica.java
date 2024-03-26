@@ -26,6 +26,8 @@ public class InterfazGrafica extends javax.swing.JFrame {
     private int contadorPlaylists = 0; // Contador de playlists creadas
     private Playlist[] playlists = new Playlist[3]; // Array para almacenar las playlists creadas
     private Player player;
+    private boolean isPlaying = false;
+    private int indice;
 
     public InterfazGrafica() {
         initComponents();
@@ -36,22 +38,24 @@ public class InterfazGrafica extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked")
 
+    // Este método establece las playlists en la interfaz y actualiza la lista de playlists creadas.
     public void setPlaylists(Playlist[] playlists) {
-        this.playlists = playlists;
-        actualizarJListPlaylistCreadas();
+        this.playlists = playlists; // Asigna el array de playlists recibido al atributo de la clase
+        actualizarJListPlaylistCreadas(); // Llama al método para actualizar la lista de playlists en la interfaz
     }
 
+// Este método actualiza la lista de playlists creadas en la interfaz gráfica.
     private void actualizarJListPlaylistCreadas() {
+        String[] nombresPlaylists = new String[3]; // Array para almacenar los nombres de las playlists
 
-        String[] nombresPlaylists = new String[3];
-
+        // Recorre el array de playlists
         for (int i = 0; i < 3; i++) {
-
+            // Verifica si la playlist en la posición actual no es nula
             if (playlists[i] != null) {
-                nombresPlaylists[i] = playlists[i].getNombrePlaylist();
+                nombresPlaylists[i] = playlists[i].getNombrePlaylist(); // Obtiene el nombre de la playlist y lo asigna al array
             }
         }
-        jListPlaylistCreadas.setListData(nombresPlaylists);
+        jListPlaylistCreadas.setListData(nombresPlaylists); // Actualiza la lista de playlists en la interfaz con los nombres obtenidos
     }
 
 
@@ -103,11 +107,6 @@ public class InterfazGrafica extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jListPlaylist);
 
-        jListPlaylistCreadas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jListPlaylistCreadasMouseClicked(evt);
-            }
-        });
         jScrollPane2.setViewportView(jListPlaylistCreadas);
 
         textoPlaylistCreadas.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
@@ -159,16 +158,15 @@ public class InterfazGrafica extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipalLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(botonAgregarPlaylist))
-                            .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(panelPrincipalLayout.createSequentialGroup()
-                                    .addGap(18, 18, 18)
-                                    .addComponent(botonSiguienteCancion))
-                                .addGroup(panelPrincipalLayout.createSequentialGroup()
-                                    .addGap(104, 104, 104)
-                                    .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(textoPlaylistCreadas, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(botonEliminarPlaylist)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                            .addGroup(panelPrincipalLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(botonSiguienteCancion))
+                            .addGroup(panelPrincipalLayout.createSequentialGroup()
+                                .addGap(104, 104, 104)
+                                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(textoPlaylistCreadas, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(botonEliminarPlaylist)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(panelPrincipalLayout.createSequentialGroup()
                         .addComponent(jTextFieldBarraDeBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -221,7 +219,61 @@ public class InterfazGrafica extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonPausarReproducirCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPausarReproducirCancionActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Verifica si hay una playlist seleccionada y si la canción actual en la playlist no es nula
+            if (playlists != null && playlists[indice] != null) {
+                // Verifica si el reproductor ya está inicializado
+                if (player != null) {
+                    // Si la canción está en reproducción, la pausa
+                    if (isPlaying) {
+                        player.close();
+                        isPlaying = false;
+                    } else {
+                        // Si la canción no está en reproducción, la inicia
+                        String rutaCancion = playlists[indice].getRutaCancion(indice);
+                        if (rutaCancion != null) {
+                            player = new Player(new FileInputStream(rutaCancion));
+                            // Inicia un hilo para reproducir la canción
+                            new Thread(() -> {
+                                try {
+                                    player.play();
+                                } catch (JavaLayerException ex) {
+                                    Logger.getLogger(InterfazGrafica.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }).start();
+                            isPlaying = true; // Actualiza el estado de reproducción
+                        } else {
+                            System.out.println("No hay canción seleccionada.");
+                        }
+                    }
+                } else {
+                    // Si el reproductor no está inicializado, lo inicializa y comienza la reproducción
+                    String rutaCancion = playlists[indice].getRutaCancion(indice);
+                    if (rutaCancion != null) {
+                        player = new Player(new FileInputStream(rutaCancion));
+                        // Inicia un hilo para reproducir la canción
+                        new Thread(() -> {
+                            try {
+                                player.play();
+                            } catch (JavaLayerException ex) {
+                                Logger.getLogger(InterfazGrafica.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }).start();
+                        isPlaying = true; // Actualiza el estado de reproducción
+                    } else {
+                        System.out.println("Ninguna canción seleccionada.");
+                    }
+                }
+            } else {
+                System.out.println("No hay una playlist seleccionada.");
+            }
+        } catch (FileNotFoundException | JavaLayerException ex) {
+            // Maneja las excepciones de archivo no encontrado y de JavaLayer
+            Logger.getLogger(InterfazGrafica.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error al reproducir la canción: " + ex.getMessage());
+        }
+
+
     }//GEN-LAST:event_botonPausarReproducirCancionActionPerformed
 
     private void botonSiguienteCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSiguienteCancionActionPerformed
@@ -237,9 +289,9 @@ public class InterfazGrafica extends javax.swing.JFrame {
         if (contadorPlaylists < 3) {// Verifica si ya se han creado tres playlists            
 
             String nombrePlaylist = JOptionPane.showInputDialog("Ingrese el nombre de la playlist:");
-            
+
             Playlist nuevaPlaylist = new Playlist(nombrePlaylist, 3);
-            
+
             playlists[contadorPlaylists] = nuevaPlaylist; // Almacena la playlist en el array
 
             String titulo = JOptionPane.showInputDialog("Ingrese el título de la canción:");
@@ -247,11 +299,11 @@ public class InterfazGrafica extends javax.swing.JFrame {
             String album = JOptionPane.showInputDialog("Ingrese el álbum de la canción:");
 
             JFileChooser fileChooserAgregarPlaylist = new JFileChooser();
-            
+
             int result = fileChooserAgregarPlaylist.showOpenDialog(null);
 
             if (result == JFileChooser.APPROVE_OPTION) {
-                
+
                 File selectedFile = fileChooserAgregarPlaylist.getSelectedFile();
                 String rutaDeLaCancion = selectedFile.getAbsolutePath();
 
@@ -274,27 +326,6 @@ public class InterfazGrafica extends javax.swing.JFrame {
 
     }//GEN-LAST:event_botonAgregarPlaylistActionPerformed
 
-    private void jListPlaylistCreadasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListPlaylistCreadasMouseClicked
-
-        // Verificar si el evento es un doble clic
-        if (evt.getClickCount() == 2) {
-            // Obtener el índice del elemento seleccionado
-            int index = jListPlaylistCreadas.getSelectedIndex();
-            // Verificar si el índice es válido y reproducir la playlist correspondiente
-            if (index != -1 && playlists[index] != null) {
-                try {
-                    reproducirPlaylist(playlists[index]);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(InterfazGrafica.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (JavaLayerException ex) {
-                    Logger.getLogger(InterfazGrafica.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-
-
-    }//GEN-LAST:event_jListPlaylistCreadasMouseClicked
-
     private void reproducirPlaylist(Playlist playlist) throws FileNotFoundException, JavaLayerException {
         // Obtener la lista de canciones de la playlist
         Cancion[] canciones = playlist.getPlaylist();
@@ -302,8 +333,8 @@ public class InterfazGrafica extends javax.swing.JFrame {
         for (Cancion cancion : canciones) {
             if (cancion != null) {
                 // Crear una instancia de Player con la ruta de la canción actual
-                    player = new Player(new FileInputStream(cancion.getRutaCancion()));
-                    player.play(); // Reproducir la canción
+                player = new Player(new FileInputStream(cancion.getRutaCancion()));
+                player.play(); // Reproducir la canción
                 // Nota: Debes tener en cuenta cómo gestionar la reproducción de múltiples canciones de forma secuencial o simultánea según tu requerimiento.
             }
         }
