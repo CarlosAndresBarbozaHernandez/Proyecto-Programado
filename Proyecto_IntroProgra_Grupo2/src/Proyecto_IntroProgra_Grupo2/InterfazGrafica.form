@@ -225,6 +225,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Eliminar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonEliminarCancionActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="botonAgregarCancion">
           <Properties>
@@ -235,6 +238,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Eliminar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonEliminarPlaylistActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="botonAgregarPlaylist">
           <Properties>

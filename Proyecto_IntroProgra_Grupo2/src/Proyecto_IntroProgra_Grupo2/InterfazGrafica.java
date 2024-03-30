@@ -122,10 +122,20 @@ public class InterfazGrafica extends javax.swing.JFrame {
         });
 
         botonEliminarCancion.setText("Eliminar");
+        botonEliminarCancion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEliminarCancionActionPerformed(evt);
+            }
+        });
 
         botonAgregarCancion.setText("Agregar Cancion");
 
         botonEliminarPlaylist.setText("Eliminar");
+        botonEliminarPlaylist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEliminarPlaylistActionPerformed(evt);
+            }
+        });
 
         botonAgregarPlaylist.setText("Agregar Playlist");
         botonAgregarPlaylist.addActionListener(new java.awt.event.ActionListener() {
@@ -325,6 +335,36 @@ public class InterfazGrafica extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_botonAgregarPlaylistActionPerformed
+
+    private void botonEliminarPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarPlaylistActionPerformed
+        // Obtener la playlist seleccionada
+        String nombrePlaylist = jListPlaylistCreadas.getSelectedValue();
+        
+        //Verificar si se seleccionó
+        if (nombrePlaylist != null){
+            //buscar la playlist
+            for (int i = 0; i < playlists.length; i++){
+               if (playlists[i] != null && nombrePlaylist.equals(playlists[i].getNombrePlaylist())){
+                   //Eliminar la playlist
+                   playlists[i] = null;
+                   //Actulizar la lista
+                   actualizarJListPlaylistCreadas();
+                   //Mostrar mensaje de eliminación
+                   JOptionPane.showMessageDialog(null, "La playlist se eliminó correctamente");
+                   return; //Salir del bucle 
+               }
+            }
+            //Mostrar un error
+            JOptionPane.showMessageDialog(null, "No se ha seleccionado una playlist");
+        }else{
+            //Mostrar solución
+            JOptionPane.showMessageDialog(null, "Por favor seleccione una playlist para eliminar");
+        }
+    }//GEN-LAST:event_botonEliminarPlaylistActionPerformed
+
+    private void botonEliminarCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarCancionActionPerformed
+        // todavia no puedo programarlo
+    }//GEN-LAST:event_botonEliminarCancionActionPerformed
 
     private void reproducirPlaylist(Playlist playlist) throws FileNotFoundException, JavaLayerException {
         // Obtener la lista de canciones de la playlist
