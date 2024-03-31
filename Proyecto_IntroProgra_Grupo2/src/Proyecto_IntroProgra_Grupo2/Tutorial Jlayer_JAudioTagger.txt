@@ -9,3 +9,13 @@ el enlace es este: https://jar-download.com/artifacts/javazoom
 6. Le dan click derecho y luego en "Add Library"
 7. Hay buscan la libreria que agregaron en el paso 3 y le dan click donde dice "Add Library"
 8. Con eso ya van a poder usar la libreria "jlayer" para reproducir archivos .mp3
+
+Libreria jaudiotagger 
+1. El folder con la libreria se encuentra en el repositorio.
+2. Al igual que la libreria jlayer hay que agregarla localmente.
+3. Hacer fetch y pull del repositorio.
+3. Irse a "Tools" o "Herramientas" > Dar click en "Libraries" o "Librerias"
+4. Dar click en "New Library" o "Nueva Libreria", le asignan el nombre de "jaudiotagger-2.0.3" y le dan OK.
+5. Dar click en "Add JAR/Folder" o "Agregar JAR/Directorio", buscan la ruta donde tienen el repositorio y seleccionan el folder "jaudiotagger-2.0.3".
+6. Dar click en "Agregar" o "Add" y le dan OK.
+7. Esto les deberia cargar la libreria automaticamente, en caso de que no, seguir los pasos de la libreria jlayer a partir del paso 5.

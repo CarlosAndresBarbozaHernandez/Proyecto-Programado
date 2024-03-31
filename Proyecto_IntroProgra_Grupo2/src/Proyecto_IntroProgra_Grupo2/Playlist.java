@@ -10,21 +10,22 @@ import javax.swing.JOptionPane;
  *
  * @author charlie
  */
-
 public class Playlist {
-    
+
     //se supone que aqui va el metodo para crear las playlist 
     private String nombrePlaylist;
     private Cancion[] playlist;
     private int indice;
-    
+    private int contadorCanciones;
+
     // Constructor de la clase Playlist
     public Playlist(String name, int maxSize) {
-        nombrePlaylist = name;        
-        playlist = new Cancion[2];
+        nombrePlaylist = name;
+        playlist = new Cancion[maxSize];
         indice = 0;
+        this.contadorCanciones = 0;
     }
-    
+
     // Getters and Setters
     public String getNombrePlaylist() {
         return nombrePlaylist;
@@ -49,27 +50,31 @@ public class Playlist {
     public void setIndice(int indice) {
         this.indice = indice;
     }
-    
-    // Método para agregar una canción a la playlist
-    public void agregarCancion(String nombre, String artista, String album, String rutaCancion) {
-        
-        if (indice < playlist.length) {
-            playlist[indice] = new Cancion(nombre, artista, album, rutaCancion);
-            indice++;
-            JOptionPane.showMessageDialog(null, "La canción se agregó correctamente a la playlist.");
-        } else {
-            JOptionPane.showMessageDialog(null, "La playlist está llena. No se pueden agregar más canciones.");
-        }
+
+    public int getContadorCanciones() {
+        return this.contadorCanciones;
     }
-    
+
+    public void setContadorCanciones(int contador) {
+        this.contadorCanciones = contador;
+    }
+
+    // Método para agregar una canción a la playlist
+    public void agregarCancion(Cancion cancion, int i) {
+
+        playlist[i] = cancion;
+        contadorCanciones++;
+
+    }
+
     // Método para obtener la ruta de una canción por índice
     public String getRutaCancion(int indice) {
-        if (indice >= 0 && indice < this.indice) {
+        if (indice >= 0 && indice < this.contadorCanciones) {
             return playlist[indice].getRutaCancion();
         } else {
-            JOptionPane.showMessageDialog(null, "Índice de canción inválido.");
+            //JOptionPane.showMessageDialog(null, "Índice de canción inválido.");
             return null;
         }
     }
-   
+
 }

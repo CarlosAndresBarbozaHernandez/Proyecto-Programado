@@ -8,13 +8,15 @@ public class Cancion {
 
     // Atributos
     private String nombre, artista, album, rutaCancion;
+    private int duracion;
 
     // Constructor
-    public Cancion(String nombre, String artista, String album, String rutaCancion) {
+    public Cancion(String nombre, String artista, String album, String rutaCancion, int duracion) {
         this.nombre = nombre;
         this.artista = artista;
         this.album = album;
         this.rutaCancion = rutaCancion;
+        this.duracion = duracion;
     }
 
     // Setters and Getters
@@ -48,6 +50,14 @@ public class Cancion {
 
     public void setRutaCancion(String rutaCancion) {
         this.rutaCancion = rutaCancion;
+    }
+    
+    public int getDuracion() {
+        return this.duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
     }
 
 }
