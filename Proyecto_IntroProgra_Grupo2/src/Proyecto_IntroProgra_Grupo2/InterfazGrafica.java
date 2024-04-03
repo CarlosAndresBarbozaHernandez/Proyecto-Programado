@@ -1,25 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Proyecto_IntroProgra_Grupo2;
 
-import java.awt.event.ActionEvent;
+
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.Player;
+import javazoom.jlgui.basicplayer.BasicPlayer;
+import javazoom.jlgui.basicplayer.BasicPlayerException;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.apache.commons.logging.LogFactory;
+import org.tritonus.share.sampled.file.TAudioFileFormat;
+
+
 
 /**
  *
@@ -30,7 +28,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
     private int contadorPlaylists = 0; // Contador de playlists creadas
     private Playlist playlistGeneral = new Playlist("Playlist General", 100);
     private Playlist[] playlists = new Playlist[3]; // Array para almacenar las playlists creadas
-    private Player player;
+    private BasicPlayer player; // Cambio a BasicPlayer
     private boolean isPlaying = false;
     
     public InterfazGrafica() {
@@ -318,46 +316,29 @@ public class InterfazGrafica extends javax.swing.JFrame {
         int indiceCancion = jListCanciones.getSelectedIndex();
         
         try {
-            // Verifica si hay una playlist seleccionada y si la canción actual en la playlist no es nula
             if (playlists != null && playlists[indicePlaylist] != null) {
-                // Verifica si el reproductor ya está inicializado
                 if (player != null) {
-                    // Si la canción está en reproducción, la pausa
                     if (isPlaying) {
-                        player.close();
+                        player.pause(); // Pausa la canción
                         isPlaying = false;
                     } else {
-                        // Si la canción no está en reproducción, la inicia
                         String rutaCancion = playlists[indicePlaylist].getRutaCancion(indiceCancion);
                         if (rutaCancion != null) {
-                            player = new Player(new FileInputStream(rutaCancion));
-                            // Inicia un hilo para reproducir la canción
-                            new Thread(() -> {
-                                try {
-                                    player.play();
-                                } catch (JavaLayerException ex) {
-                                    Logger.getLogger(InterfazGrafica.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            }).start();
-                            isPlaying = true; // Actualiza el estado de reproducción
+                            // Inicia la reproducción de la canción
+                            player.open(new File(rutaCancion));
+                            player.play();
+                            isPlaying = true;
                         } else {
                             JOptionPane.showMessageDialog(null, "No hay canción seleccionada.", "Seleccionar Cancion", JOptionPane.INFORMATION_MESSAGE);
                         }
                     }
                 } else {
-                    // Si el reproductor no está inicializado, lo inicializa y comienza la reproducción
                     String rutaCancion = playlists[indicePlaylist].getRutaCancion(indiceCancion);
                     if (rutaCancion != null) {
-                        player = new Player(new FileInputStream(rutaCancion));
-                        // Inicia un hilo para reproducir la canción
-                        new Thread(() -> {
-                            try {
-                                player.play();
-                            } catch (JavaLayerException ex) {
-                                Logger.getLogger(InterfazGrafica.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }).start();
-                        isPlaying = true; // Actualiza el estado de reproducción
+                        player = new BasicPlayer();
+                        player.open(new File(rutaCancion));
+                        player.play();
+                        isPlaying = true;
                     } else {
                         JOptionPane.showMessageDialog(null, "Ninguna canción seleccionada.", "Seleccionar Cancion", JOptionPane.INFORMATION_MESSAGE);
                     }
@@ -365,8 +346,8 @@ public class InterfazGrafica extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "No hay una playlist seleccionada.", "Seleccionar Playlist", JOptionPane.INFORMATION_MESSAGE);
             }
-        } catch (FileNotFoundException | JavaLayerException ex) {
-            // Maneja las excepciones de archivo no encontrado y de JavaLayer
+        } catch (BasicPlayerException ex) {
+            // Maneja las excepciones de BasicPlayer
             Logger.getLogger(InterfazGrafica.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Error al reproducir la canción: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -534,14 +515,16 @@ public class InterfazGrafica extends javax.swing.JFrame {
         
     }
     
-    private void reproducirPlaylist(Playlist playlist) throws FileNotFoundException, JavaLayerException {
+    private void reproducirPlaylist(Playlist playlist) throws FileNotFoundException, JavaLayerException, BasicPlayerException {
         // Obtener la lista de canciones de la playlist
         Cancion[] canciones = playlist.getPlaylist();
         // Recorrer la lista de canciones y reproducirlas una por una
         for (Cancion cancion : canciones) {
             if (cancion != null) {
                 // Crear una instancia de Player con la ruta de la canción actual
-                player = new Player(new FileInputStream(cancion.getRutaCancion()));
+                //player = new Player(new FileInputStream(cancion.getRutaCancion()));
+                player = new BasicPlayer();
+                player.open(new File(cancion.getRutaCancion()));
                 player.play(); // Reproducir la canción
                 // Nota: Debes tener en cuenta cómo gestionar la reproducción de múltiples canciones de forma secuencial o simultánea según tu requerimiento.
             }
