@@ -19,3 +19,9 @@ Libreria jaudiotagger
 5. Dar click en "Add JAR/Folder" o "Agregar JAR/Directorio", buscan la ruta donde tienen el repositorio y seleccionan el folder "jaudiotagger-2.0.3".
 6. Dar click en "Agregar" o "Add" y le dan OK.
 7. Esto les deberia cargar la libreria automaticamente, en caso de que no, seguir los pasos de la libreria jlayer a partir del paso 5.
+
+NUEVOS ENLACES PARA DESCARGAR LAS LIBRERIAS
+
+1. http://www.java2s.com/Code/Jar/o/Downloadorgapachecommonsloggingjar.htm
+2. http://www.java2s.com/Code/Jar/t/Downloadtritonussharejar.htm
+3. Acuerdesen de descomprimir el archivo antes de querer agregar la libreria al proyecto

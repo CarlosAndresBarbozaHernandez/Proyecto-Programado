@@ -1,6 +1,5 @@
 package Proyecto_IntroProgra_Grupo2;
 
-
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -14,15 +13,11 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+
+//Nuevas librerias para que funcione basicplayer
 import org.apache.commons.logging.LogFactory;
 import org.tritonus.share.sampled.file.TAudioFileFormat;
 
-
-
-/**
- *
- * @author charlie
- */
 public class InterfazGrafica extends javax.swing.JFrame {
     
     private int contadorPlaylists = 0; // Contador de playlists creadas
