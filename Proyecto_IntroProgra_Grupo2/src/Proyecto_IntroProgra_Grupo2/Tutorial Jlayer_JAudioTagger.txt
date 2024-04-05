@@ -25,3 +25,4 @@ creen una carpeta donde esten todas las librerias que necesitan, por orden
 3. Le dan click en new library, copian y pegan el mismo nombre del archivo
 4. Luego le dan click donde dice annadir jar/folder y buscan el archivo y le dan click
 5. Listo ya tienen la libreria agregada a su netbeans
+Prueba
