@@ -69,23 +69,25 @@ public class InterfazGrafica extends javax.swing.JFrame {
     }
     
     private void actualizarJListCanciones(Playlist pPlaylist) {
-        String[] nombresCanciones = new String[pPlaylist.getContadorCanciones()]; // Array para almacenar los nombres de las canciones
-        int auxContador = pPlaylist.getContadorCanciones();
-        int i = 0;
+        if (pPlaylist != null) { // Verifica si pPlaylist no es null
+            String[] nombresCanciones = new String[pPlaylist.getContadorCanciones()]; // Array para almacenar los nombres de las canciones
+            int auxContador = pPlaylist.getContadorCanciones();
+            int i = 0;
 
-        // Recorre el array de canciones
-        do {
-            if (pPlaylist.getPlaylist()[i] != null) {
-                nombresCanciones[i] = pPlaylist.getPlaylist()[i].getNombre(); // Obtiene el nombre de la cancion y lo asigna al array
-                auxContador--;
+            // Recorre el array de canciones
+            for (Cancion cancion : pPlaylist.getPlaylist()) {
+                if (cancion != null) {
+                    nombresCanciones[i] = cancion.getNombre(); // Obtiene el nombre de la canción y lo asigna al array
+                    auxContador--;
+                }
+                i++;
             }
-            i++;
-        } while (auxContador != 0);
-        
-        jListCanciones.setListData(nombresCanciones); // Actualiza la lista de canciones en la interfaz con los nombres obtenidos
-    }
 
-
+            jListCanciones.setListData(nombresCanciones); // Actualiza la lista de canciones en la interfaz con los nombres obtenidos
+        } else {
+            // Si pPlaylist es null, muestra un mensaje de error o realiza otra acción adecuada
+            System.err.println("Error: pPlaylist es null");
+        }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -117,6 +119,11 @@ public class InterfazGrafica extends javax.swing.JFrame {
         textoPlaylist.setText("Playlist General");
 
         botonRetrocederCancion.setText("Retroceder");
+        botonRetrocederCancion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRetrocederCancionActionPerformed(evt);
+            }
+        });
 
         botonPausarReproducirCancion.setText("Pausar/Reproducir");
         botonPausarReproducirCancion.addActionListener(new java.awt.event.ActionListener() {
@@ -270,9 +277,8 @@ public class InterfazGrafica extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
-                    .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonEliminarCancion)
@@ -346,12 +352,46 @@ public class InterfazGrafica extends javax.swing.JFrame {
             Logger.getLogger(InterfazGrafica.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Error al reproducir la canción: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
-
     }//GEN-LAST:event_botonPausarReproducirCancionActionPerformed
 
     private void botonSiguienteCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSiguienteCancionActionPerformed
-        // TODO add your handling code here:
+        int indicePlaylist = jListPlaylistCreadas.getSelectedIndex(); // Get the index of the selected playlist
+    int indiceCancionActual = jListCanciones.getSelectedIndex(); // Get the index of the currently selected song
+
+    // Check if there is a selected playlist and a selected song
+    if (indicePlaylist != -1 && indiceCancionActual != -1) {
+        // Check if there is a next song in the playlist
+        if (indiceCancionActual + 1 < playlists[indicePlaylist].getContadorCanciones()) {
+            // Get the index of the next song
+            int indiceSiguienteCancion = indiceCancionActual + 1;
+            // Update the selected index in the song list
+            jListCanciones.setSelectedIndex(indiceSiguienteCancion);
+
+            try {
+                // Pause the current song if it's playing
+                if (isPlaying) {
+                    player.pause();
+                    isPlaying = false;
+                }
+                // Get the path of the next song
+                String rutaCancion = playlists[indicePlaylist].getRutaCancion(indiceSiguienteCancion);
+                // Open and play the next song
+                player.open(new File(rutaCancion));
+                player.play();
+                isPlaying = true;
+            } catch (BasicPlayerException ex) {
+                // Handle BasicPlayerException
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al reproducir la siguiente canción: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            // If there is no next song, show a message
+            JOptionPane.showMessageDialog(null, "No hay más canciones en la lista.", "Fin de la lista", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } else {
+        // If no playlist or song is selected, show a message
+        JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción.", "Selección requerida", JOptionPane.INFORMATION_MESSAGE);
+    }
     }//GEN-LAST:event_botonSiguienteCancionActionPerformed
 
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
@@ -452,6 +492,46 @@ public class InterfazGrafica extends javax.swing.JFrame {
         jListCanciones.setSelectedIndex(0);
         
     }//GEN-LAST:event_jListPlaylistCreadasValueChanged
+
+    private void botonRetrocederCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetrocederCancionActionPerformed
+int indicePlaylist = jListPlaylistCreadas.getSelectedIndex(); // Obtener el índice de la playlist seleccionada
+    int indiceCancionActual = jListCanciones.getSelectedIndex(); // Obtener el índice de la canción actualmente seleccionada
+
+    // Verificar si hay una playlist seleccionada y una canción seleccionada
+    if (indicePlaylist != -1 && indiceCancionActual != -1) {
+        // Verificar si hay una canción anterior en la playlist
+        if (indiceCancionActual - 1 >= 0) {
+            // Obtener el índice de la canción anterior
+            int indiceCancionAnterior = indiceCancionActual - 1;
+            // Actualizar el índice seleccionado en la lista de canciones
+            jListCanciones.setSelectedIndex(indiceCancionAnterior);
+
+            try {
+                // Pausar la canción actual si se está reproduciendo
+                if (isPlaying) {
+                    player.pause();
+                    isPlaying = false;
+                }
+                // Obtener la ruta de la canción anterior
+                String rutaCancion = playlists[indicePlaylist].getRutaCancion(indiceCancionAnterior);
+                // Abrir y reproducir la canción anterior
+                player.open(new File(rutaCancion));
+                player.play();
+                isPlaying = true;
+            } catch (BasicPlayerException ex) {
+                // Manejar BasicPlayerException
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al reproducir la canción anterior: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            // Si no hay una canción anterior, mostrar un mensaje
+            JOptionPane.showMessageDialog(null, "Ya estás en la primera canción de la lista.", "Inicio de la lista", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } else {
+        // Si no hay playlist o canción seleccionada, mostrar un mensaje
+        JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción.", "Selección requerida", JOptionPane.INFORMATION_MESSAGE);
+    }
+    }//GEN-LAST:event_botonRetrocederCancionActionPerformed
     
     private void AgregarCancion(Playlist pPlaylist) {
         
