@@ -19,20 +19,20 @@ import org.apache.commons.logging.LogFactory;
 import org.tritonus.share.sampled.file.TAudioFileFormat;
 
 public class InterfazGrafica extends javax.swing.JFrame {
-    
+
     private int contadorPlaylists = 0; // Contador de playlists creadas
     private Playlist playlistGeneral = new Playlist("Playlist General", 100);
     private Playlist[] playlists = new Playlist[3]; // Array para almacenar las playlists creadas
     private BasicPlayer player; // Cambio a BasicPlayer
     private boolean isPlaying = false;
-    
+
     public InterfazGrafica() {
         initComponents();
 
         //Comando para centrar la interfaz cuando se ejecute el programa
         setLocationRelativeTo(null);
     }
-    
+
     @SuppressWarnings("unchecked")
 
     // Este método establece las playlists en la interfaz y actualiza la lista de playlists creadas.
@@ -54,7 +54,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
         }
         jListPlaylistCreadas.setListData(nombresPlaylists); // Actualiza la lista de playlists en la interfaz con los nombres obtenidos
     }
-    
+
     private void actualizarJListPlaylist() {
         String[] nombresCanciones = new String[playlistGeneral.getContadorCanciones()]; // Array para almacenar los nombres de las canciones
 
@@ -67,7 +67,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
         }
         jListPlaylist.setListData(nombresCanciones); // Actualiza la lista de canciones en la interfaz con los nombres obtenidos
     }
-    
+
     private void actualizarJListCanciones(Playlist pPlaylist) {
         if (pPlaylist != null) { // Verifica si pPlaylist no es null
             String[] nombresCanciones = new String[pPlaylist.getContadorCanciones()]; // Array para almacenar los nombres de las canciones
@@ -88,6 +88,8 @@ public class InterfazGrafica extends javax.swing.JFrame {
             // Si pPlaylist es null, muestra un mensaje de error o realiza otra acción adecuada
             System.err.println("Error: pPlaylist es null");
         }
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -312,10 +314,10 @@ public class InterfazGrafica extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonPausarReproducirCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPausarReproducirCancionActionPerformed
-        
+
         int indicePlaylist = jListPlaylistCreadas.getSelectedIndex();
         int indiceCancion = jListCanciones.getSelectedIndex();
-        
+
         try {
             if (playlists != null && playlists[indicePlaylist] != null) {
                 if (player != null) {
@@ -356,42 +358,42 @@ public class InterfazGrafica extends javax.swing.JFrame {
 
     private void botonSiguienteCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSiguienteCancionActionPerformed
         int indicePlaylist = jListPlaylistCreadas.getSelectedIndex(); // Get the index of the selected playlist
-    int indiceCancionActual = jListCanciones.getSelectedIndex(); // Get the index of the currently selected song
+        int indiceCancionActual = jListCanciones.getSelectedIndex(); // Get the index of the currently selected song
 
-    // Check if there is a selected playlist and a selected song
-    if (indicePlaylist != -1 && indiceCancionActual != -1) {
-        // Check if there is a next song in the playlist
-        if (indiceCancionActual + 1 < playlists[indicePlaylist].getContadorCanciones()) {
-            // Get the index of the next song
-            int indiceSiguienteCancion = indiceCancionActual + 1;
-            // Update the selected index in the song list
-            jListCanciones.setSelectedIndex(indiceSiguienteCancion);
+        // Check if there is a selected playlist and a selected song
+        if (indicePlaylist != -1 && indiceCancionActual != -1) {
+            // Check if there is a next song in the playlist
+            if (indiceCancionActual + 1 < playlists[indicePlaylist].getContadorCanciones()) {
+                // Get the index of the next song
+                int indiceSiguienteCancion = indiceCancionActual + 1;
+                // Update the selected index in the song list
+                jListCanciones.setSelectedIndex(indiceSiguienteCancion);
 
-            try {
-                // Pause the current song if it's playing
-                if (isPlaying) {
-                    player.pause();
-                    isPlaying = false;
+                try {
+                    // Pause the current song if it's playing
+                    if (isPlaying) {
+                        player.pause();
+                        isPlaying = false;
+                    }
+                    // Get the path of the next song
+                    String rutaCancion = playlists[indicePlaylist].getRutaCancion(indiceSiguienteCancion);
+                    // Open and play the next song
+                    player.open(new File(rutaCancion));
+                    player.play();
+                    isPlaying = true;
+                } catch (BasicPlayerException ex) {
+                    // Handle BasicPlayerException
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al reproducir la siguiente canción: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                // Get the path of the next song
-                String rutaCancion = playlists[indicePlaylist].getRutaCancion(indiceSiguienteCancion);
-                // Open and play the next song
-                player.open(new File(rutaCancion));
-                player.play();
-                isPlaying = true;
-            } catch (BasicPlayerException ex) {
-                // Handle BasicPlayerException
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Error al reproducir la siguiente canción: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                // If there is no next song, show a message
+                JOptionPane.showMessageDialog(null, "No hay más canciones en la lista.", "Fin de la lista", JOptionPane.INFORMATION_MESSAGE);
             }
         } else {
-            // If there is no next song, show a message
-            JOptionPane.showMessageDialog(null, "No hay más canciones en la lista.", "Fin de la lista", JOptionPane.INFORMATION_MESSAGE);
+            // If no playlist or song is selected, show a message
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción.", "Selección requerida", JOptionPane.INFORMATION_MESSAGE);
         }
-    } else {
-        // If no playlist or song is selected, show a message
-        JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción.", "Selección requerida", JOptionPane.INFORMATION_MESSAGE);
-    }
     }//GEN-LAST:event_botonSiguienteCancionActionPerformed
 
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
@@ -399,32 +401,32 @@ public class InterfazGrafica extends javax.swing.JFrame {
     }//GEN-LAST:event_botonBuscarActionPerformed
 
     private void botonAgregarPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarPlaylistActionPerformed
-        
+
         if (contadorPlaylists < 3) {// Verifica si ya se han creado tres playlists            
 
             String nombrePlaylist = JOptionPane.showInputDialog("Ingrese el nombre de la playlist:");
-            
+
             Playlist nuevaPlaylist = new Playlist(nombrePlaylist, 3);
-            
+
             int aux = JOptionPane.showConfirmDialog(null, "Desea Agregar Canciones al Playlist", "Agregar Cancion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            
+
             while (aux == 0) {
-                
+
                 this.AgregarCancion(nuevaPlaylist);
                 this.actualizarJListCanciones(nuevaPlaylist);
                 aux = JOptionPane.showConfirmDialog(null, "Desea Agregar otra Cancion al Playlist?", "Agregar Cancion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             }
-            
+
             playlists[contadorPlaylists] = nuevaPlaylist; // Almacena la playlist en el array
 
             contadorPlaylists++; // Incrementa el contador de playlists creadas
 
             actualizarJListPlaylistCreadas();
-            
+
         } else {
-            
+
             JOptionPane.showMessageDialog(null, "Ya se han creado tres playlists. No se pueden crear más.");
-            
+
         }
 
     }//GEN-LAST:event_botonAgregarPlaylistActionPerformed
@@ -456,18 +458,46 @@ public class InterfazGrafica extends javax.swing.JFrame {
     }//GEN-LAST:event_botonEliminarPlaylistActionPerformed
 
     private void botonEliminarCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarCancionActionPerformed
-        // todavia no puedo programarlo
+        // Obtener la playlist seleccionada
+        int indicePlaylist = jListPlaylistCreadas.getSelectedIndex();
+        // Obtener la canción seleccionada
+        int indiceCancion = jListCanciones.getSelectedIndex();
+        // Verificar si se seleccionó una playlist y una canción
+        if (indicePlaylist != -1 && indiceCancion != -1) {
+            // Obtener la playlist correspondiente al índice seleccionado
+            Playlist playlistSeleccionada = playlists[indicePlaylist];
+            // Obtener la canción seleccionada en la playlist
+            Cancion cancionEliminar = playlistSeleccionada.getPlaylist()[indiceCancion];
+            int contador = playlistSeleccionada.getContadorCanciones();
+            // Verificar si la canción existe en la playlist
+            if (cancionEliminar != null) {
+                // Eliminar la canción de la playlist
+                playlistSeleccionada.getPlaylist()[indiceCancion] = null;
+                // Actualizar la lista de canciones en la interfaz
+                actualizarJListCanciones(playlistSeleccionada);
+                // Mostrar un mensaje de éxito
+                JOptionPane.showMessageDialog(null, "La canción se eliminó correctamente de la playlist.");
+                contador--;
+                playlistSeleccionada.setContadorCanciones(contador);
+            } else {
+                // Mostrar un mensaje de error si no se encontró la canción
+                JOptionPane.showMessageDialog(null, "La canción seleccionada no existe en la playlist.");
+            }
+        } else {
+            // Mostrar un mensaje si no se seleccionó ninguna playlist o canción
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción para eliminar.");
+        }
     }//GEN-LAST:event_botonEliminarCancionActionPerformed
 
     private void botonAgregarCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarCancionActionPerformed
-        
+
         this.AgregarCancion(this.playlistGeneral);
         this.actualizarJListPlaylist();
 
     }//GEN-LAST:event_botonAgregarCancionActionPerformed
 
     private void botonAgregarCancion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarCancion2ActionPerformed
-        
+
         int index = jListPlaylistCreadas.getSelectedIndex();
         this.AgregarCancion(playlists[index]);
         this.actualizarJListCanciones(playlists[index]);
@@ -475,75 +505,103 @@ public class InterfazGrafica extends javax.swing.JFrame {
     }//GEN-LAST:event_botonAgregarCancion2ActionPerformed
 
     private void botonEliminarCancion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarCancion2ActionPerformed
-        // TODO add your handling code here:
+        // Obtener la playlist seleccionada
+        int indicePlaylist = jListPlaylistCreadas.getSelectedIndex();
+        // Obtener la canción seleccionada
+        int indiceCancion = jListCanciones.getSelectedIndex();
+        // Verificar si se seleccionó una playlist y una canción
+        if (indicePlaylist != -1 && indiceCancion != -1) {
+            // Obtener la playlist correspondiente al índice seleccionado
+            Playlist playlistSeleccionada = playlists[indicePlaylist];
+            // Obtener la canción seleccionada en la playlist
+            Cancion cancionEliminar = playlistSeleccionada.getPlaylist()[indiceCancion];
+            int contador = playlistSeleccionada.getContadorCanciones();
+            // Verificar si la canción existe en la playlist
+            if (cancionEliminar != null) {
+                // Eliminar la canción de la playlist
+                playlistSeleccionada.getPlaylist()[indiceCancion] = null;
+                // Actualizar la lista de canciones en la interfaz
+                actualizarJListCanciones(playlistSeleccionada);
+                // Mostrar un mensaje de éxito
+                JOptionPane.showMessageDialog(null, "La canción se eliminó correctamente de la playlist.");
+                contador--;
+                playlistSeleccionada.setContadorCanciones(contador);
+            } else {
+                // Mostrar un mensaje de error si no se encontró la canción
+                JOptionPane.showMessageDialog(null, "La canción seleccionada no existe en la playlist.");
+            }
+        } else {
+            // Mostrar un mensaje si no se seleccionó ninguna playlist o canción
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción para eliminar.");
+        }
     }//GEN-LAST:event_botonEliminarCancion2ActionPerformed
 
     private void jListPlaylistCreadasComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_jListPlaylistCreadasComponentAdded
-        
+
         //Se actualiza el JListCanciones cuando se agrega un nuevo playlist.
         this.actualizarJListCanciones(playlists[jListPlaylistCreadas.getSelectedIndex()]);
 
     }//GEN-LAST:event_jListPlaylistCreadasComponentAdded
 
     private void jListPlaylistCreadasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListPlaylistCreadasValueChanged
-        
+
         int index = jListPlaylistCreadas.getSelectedIndex();
         this.actualizarJListCanciones(playlists[index]);
         jListCanciones.setSelectedIndex(0);
-        
+
     }//GEN-LAST:event_jListPlaylistCreadasValueChanged
 
     private void botonRetrocederCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetrocederCancionActionPerformed
-int indicePlaylist = jListPlaylistCreadas.getSelectedIndex(); // Obtener el índice de la playlist seleccionada
-    int indiceCancionActual = jListCanciones.getSelectedIndex(); // Obtener el índice de la canción actualmente seleccionada
+        int indicePlaylist = jListPlaylistCreadas.getSelectedIndex(); // Obtener el índice de la playlist seleccionada
+        int indiceCancionActual = jListCanciones.getSelectedIndex(); // Obtener el índice de la canción actualmente seleccionada
 
-    // Verificar si hay una playlist seleccionada y una canción seleccionada
-    if (indicePlaylist != -1 && indiceCancionActual != -1) {
-        // Verificar si hay una canción anterior en la playlist
-        if (indiceCancionActual - 1 >= 0) {
-            // Obtener el índice de la canción anterior
-            int indiceCancionAnterior = indiceCancionActual - 1;
-            // Actualizar el índice seleccionado en la lista de canciones
-            jListCanciones.setSelectedIndex(indiceCancionAnterior);
+        // Verificar si hay una playlist seleccionada y una canción seleccionada
+        if (indicePlaylist != -1 && indiceCancionActual != -1) {
+            // Verificar si hay una canción anterior en la playlist
+            if (indiceCancionActual - 1 >= 0) {
+                // Obtener el índice de la canción anterior
+                int indiceCancionAnterior = indiceCancionActual - 1;
+                // Actualizar el índice seleccionado en la lista de canciones
+                jListCanciones.setSelectedIndex(indiceCancionAnterior);
 
-            try {
-                // Pausar la canción actual si se está reproduciendo
-                if (isPlaying) {
-                    player.pause();
-                    isPlaying = false;
+                try {
+                    // Pausar la canción actual si se está reproduciendo
+                    if (isPlaying) {
+                        player.pause();
+                        isPlaying = false;
+                    }
+                    // Obtener la ruta de la canción anterior
+                    String rutaCancion = playlists[indicePlaylist].getRutaCancion(indiceCancionAnterior);
+                    // Abrir y reproducir la canción anterior
+                    player.open(new File(rutaCancion));
+                    player.play();
+                    isPlaying = true;
+                } catch (BasicPlayerException ex) {
+                    // Manejar BasicPlayerException
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al reproducir la canción anterior: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                // Obtener la ruta de la canción anterior
-                String rutaCancion = playlists[indicePlaylist].getRutaCancion(indiceCancionAnterior);
-                // Abrir y reproducir la canción anterior
-                player.open(new File(rutaCancion));
-                player.play();
-                isPlaying = true;
-            } catch (BasicPlayerException ex) {
-                // Manejar BasicPlayerException
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Error al reproducir la canción anterior: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                // Si no hay una canción anterior, mostrar un mensaje
+                JOptionPane.showMessageDialog(null, "Ya estás en la primera canción de la lista.", "Inicio de la lista", JOptionPane.INFORMATION_MESSAGE);
             }
         } else {
-            // Si no hay una canción anterior, mostrar un mensaje
-            JOptionPane.showMessageDialog(null, "Ya estás en la primera canción de la lista.", "Inicio de la lista", JOptionPane.INFORMATION_MESSAGE);
+            // Si no hay playlist o canción seleccionada, mostrar un mensaje
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción.", "Selección requerida", JOptionPane.INFORMATION_MESSAGE);
         }
-    } else {
-        // Si no hay playlist o canción seleccionada, mostrar un mensaje
-        JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción.", "Selección requerida", JOptionPane.INFORMATION_MESSAGE);
-    }
     }//GEN-LAST:event_botonRetrocederCancionActionPerformed
-    
+
     private void AgregarCancion(Playlist pPlaylist) {
-        
+
         if (pPlaylist.getContadorCanciones() < pPlaylist.getPlaylist().length) {// Se valida si en el playlist hay espacios para nuevas canciones.
 
             //Logica para seleccionar el archivo de musica.
             JFileChooser seleccionarArchivo = new JFileChooser();
-            
+
             int result = seleccionarArchivo.showOpenDialog(null);
-            
+
             if (result == JFileChooser.APPROVE_OPTION) {
-                
+
                 File cancionFile = seleccionarArchivo.getSelectedFile();
 
                 //Se extraen los metadatos de la cancion
@@ -559,22 +617,22 @@ int indicePlaylist = jListPlaylistCreadas.getSelectedIndex(); // Obtener el índ
                     artista = tag.getFirst(FieldKey.ARTIST);
                     album = tag.getFirst(FieldKey.ALBUM);
                     duracion = archivoCancion.getAudioHeader().getTrackLength();
-                    
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                
+
                 /*
                 Hay canciones que no tienen nombre en los metadatos, 
                 en estos casosutilizamos el nombre del archivo como nombre de la cancion.
-                */
+                 */
                 if (titulo.equals("")) {
                     titulo = cancionFile.getName();
                 }
-                
+
                 //Logica para agregar la cancion a la playlist.
                 for (int i = 0; i < pPlaylist.getPlaylist().length; i++) {
-                    
+
                     if (pPlaylist.getPlaylist()[i] == null) {
                         Cancion cancion = new Cancion(titulo, artista, album, rutaCancion, duracion);
                         pPlaylist.agregarCancion(cancion, i);
@@ -582,14 +640,14 @@ int indicePlaylist = jListPlaylistCreadas.getSelectedIndex(); // Obtener el índ
                         break;
                     }
                 }
-                
+
             }
         } else {
             JOptionPane.showMessageDialog(null, "La playlist está llena. No se pueden agregar más canciones.");
         }
-        
+
     }
-    
+
     private void reproducirPlaylist(Playlist playlist) throws FileNotFoundException, JavaLayerException, BasicPlayerException {
         // Obtener la lista de canciones de la playlist
         Cancion[] canciones = playlist.getPlaylist();
@@ -635,15 +693,15 @@ int indicePlaylist = jListPlaylistCreadas.getSelectedIndex(); // Obtener el índ
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            
+
             public void run() {
-                
+
                 InterfazGrafica interfaz = new InterfazGrafica();
                 // Crear las playlists que desees
                 Playlist[] playlists = new Playlist[3];
                 interfaz.setPlaylists(playlists); // Pasar el array de playlists a la interfaz
                 interfaz.setVisible(true);
-                
+
             }
         });
     }
