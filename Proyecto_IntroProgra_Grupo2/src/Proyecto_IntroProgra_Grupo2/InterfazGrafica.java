@@ -397,7 +397,34 @@ public class InterfazGrafica extends javax.swing.JFrame {
     }//GEN-LAST:event_botonSiguienteCancionActionPerformed
 
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
-        // TODO add your handling code here:
+        String textoBusqueda = jTextFieldBarraDeBusqueda.getText();
+
+        boolean encontrado = false;
+        for (Playlist playlist : playlists) {
+            if (playlist != null) {
+
+                if (playlist.getNombrePlaylist().equalsIgnoreCase(textoBusqueda)) {
+                    JOptionPane.showMessageDialog(null, "La lista de reproducción '" + playlist.getNombrePlaylist() + "' fue encontrada.");
+                    encontrado = true;
+                    break;
+                }
+
+                for (Cancion cancion : playlist.getPlaylist()) {
+                    if (cancion != null) {
+
+                        if (cancion.getNombre().equalsIgnoreCase(textoBusqueda) || cancion.getArtista().equalsIgnoreCase(textoBusqueda)) {
+                            JOptionPane.showMessageDialog(null, "La canción '" + cancion.getNombre() + "' fue encontrada en la playlist '" + playlist.getNombrePlaylist() + "'.");
+                            encontrado = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!encontrado) {
+            JOptionPane.showMessageDialog(null, "No se encontraron coincidencias para '" + textoBusqueda + "'.");
+        }
     }//GEN-LAST:event_botonBuscarActionPerformed
 
     private void botonAgregarPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarPlaylistActionPerformed
@@ -432,28 +459,24 @@ public class InterfazGrafica extends javax.swing.JFrame {
     }//GEN-LAST:event_botonAgregarPlaylistActionPerformed
 
     private void botonEliminarPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarPlaylistActionPerformed
-        // Obtener la playlist seleccionada
-        String nombrePlaylist = jListPlaylistCreadas.getSelectedValue();
 
-        //Verificar si se seleccionó
-        if (nombrePlaylist != null) {
-            //buscar la playlist
-            for (int i = 0; i < playlists.length; i++) {
-                if (playlists[i] != null && nombrePlaylist.equals(playlists[i].getNombrePlaylist())) {
-                    //Eliminar la playlist
-                    playlists[i] = null;
-                    //Actulizar la lista
-                    actualizarJListPlaylistCreadas();
-                    //Mostrar mensaje de eliminación
-                    JOptionPane.showMessageDialog(null, "La playlist se eliminó correctamente");
-                    return; //Salir del bucle 
-                }
+        int indicePlaylist = jListPlaylistCreadas.getSelectedIndex();
+
+        if (indicePlaylist != -1) {
+            Playlist playlistEliminar = playlists[indicePlaylist];
+
+            if (playlistEliminar != null) {
+                playlists[indicePlaylist] = null;
+                actualizarJListPlaylistCreadas();
+                JOptionPane.showMessageDialog(null, "La playlist se eliminó correctamente.");
+
+                botonAgregarPlaylist.setEnabled(true);
+            } else {
+
+                JOptionPane.showMessageDialog(null, "La playlist seleccionada no existe.");
             }
-            //Mostrar un error
-            JOptionPane.showMessageDialog(null, "No se ha seleccionado una playlist");
         } else {
-            //Mostrar solución
-            JOptionPane.showMessageDialog(null, "Por favor seleccione una playlist para eliminar");
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist para eliminar.");
         }
     }//GEN-LAST:event_botonEliminarPlaylistActionPerformed
 
