@@ -114,6 +114,8 @@ public class InterfazGrafica extends javax.swing.JFrame {
         botonEliminarCancion2 = new javax.swing.JButton();
         botonAgregarCancion2 = new javax.swing.JButton();
         textoListaCanciones = new javax.swing.JLabel();
+        botonSubirCancion = new javax.swing.JButton();
+        botonBajarCancion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -215,6 +217,10 @@ public class InterfazGrafica extends javax.swing.JFrame {
         textoListaCanciones.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         textoListaCanciones.setText("Lista Canciones");
 
+        botonSubirCancion.setText("Subir Cancion");
+
+        botonBajarCancion.setText("Bajar Cancion");
+
         javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
         panelPrincipal.setLayout(panelPrincipalLayout);
         panelPrincipalLayout.setHorizontalGroup(
@@ -226,7 +232,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
                         .addComponent(jTextFieldBarraDeBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(botonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(470, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(panelPrincipalLayout.createSequentialGroup()
                         .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelPrincipalLayout.createSequentialGroup()
@@ -238,31 +244,40 @@ public class InterfazGrafica extends javax.swing.JFrame {
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelPrincipalLayout.createSequentialGroup()
                                     .addComponent(botonEliminarCancion)
-                                    .addGap(18, 18, 18)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(botonAgregarCancion, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelPrincipalLayout.createSequentialGroup()
+                        .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelPrincipalLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(botonSiguienteCancion)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipalLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(botonAgregarPlaylist)
-                                    .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(botonEliminarPlaylist)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(textoPlaylistCreadas, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(89, 89, 89)
+                                .addContainerGap())
+                            .addGroup(panelPrincipalLayout.createSequentialGroup()
+                                .addGap(69, 69, 69)
                                 .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(panelPrincipalLayout.createSequentialGroup()
-                                            .addComponent(botonEliminarCancion2)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(botonAgregarCancion2)))
-                                    .addComponent(textoListaCanciones, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(26, 26, 26))))))
+                                    .addGroup(panelPrincipalLayout.createSequentialGroup()
+                                        .addComponent(textoPlaylistCreadas, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(205, 205, 205)
+                                        .addComponent(textoListaCanciones, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(150, 150, 150))
+                                    .addGroup(panelPrincipalLayout.createSequentialGroup()
+                                        .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelPrincipalLayout.createSequentialGroup()
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(85, 85, 85)
+                                                .addComponent(jScrollPane3))
+                                            .addGroup(panelPrincipalLayout.createSequentialGroup()
+                                                .addComponent(botonEliminarPlaylist)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(botonAgregarPlaylist)
+                                                .addGap(85, 85, 85)
+                                                .addComponent(botonEliminarCancion2)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(botonAgregarCancion2)))
+                                        .addGap(46, 46, 46)
+                                        .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(botonSubirCancion)
+                                            .addComponent(botonBajarCancion))
+                                        .addGap(0, 126, Short.MAX_VALUE))))))))
         );
         panelPrincipalLayout.setVerticalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,18 +292,24 @@ public class InterfazGrafica extends javax.swing.JFrame {
                     .addComponent(textoPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(textoListaCanciones))
                 .addGap(18, 18, 18)
-                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(panelPrincipalLayout.createSequentialGroup()
+                        .addComponent(botonSubirCancion)
+                        .addGap(32, 32, 32)
+                        .addComponent(botonBajarCancion)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botonEliminarCancion)
-                    .addComponent(botonAgregarCancion)
-                    .addComponent(botonEliminarPlaylist)
-                    .addComponent(botonAgregarPlaylist)
-                    .addComponent(botonEliminarCancion2)
-                    .addComponent(botonAgregarCancion2))
+                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(botonEliminarCancion)
+                        .addComponent(botonEliminarPlaylist)
+                        .addComponent(botonAgregarPlaylist)
+                        .addComponent(botonEliminarCancion2)
+                        .addComponent(botonAgregarCancion2))
+                    .addComponent(botonAgregarCancion))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                 .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonRetrocederCancion)
@@ -733,6 +754,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
     private javax.swing.JButton botonAgregarCancion;
     private javax.swing.JButton botonAgregarCancion2;
     private javax.swing.JButton botonAgregarPlaylist;
+    private javax.swing.JButton botonBajarCancion;
     private javax.swing.JButton botonBuscar;
     private javax.swing.JButton botonEliminarCancion;
     private javax.swing.JButton botonEliminarCancion2;
@@ -740,6 +762,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
     private javax.swing.JButton botonPausarReproducirCancion;
     private javax.swing.JButton botonRetrocederCancion;
     private javax.swing.JButton botonSiguienteCancion;
+    private javax.swing.JButton botonSubirCancion;
     private javax.swing.JList<String> jListCanciones;
     private javax.swing.JList<String> jListPlaylist;
     private javax.swing.JList<String> jListPlaylistCreadas;
