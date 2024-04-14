@@ -77,4 +77,23 @@ public class Playlist {
         }
     }
 
+    public void intercambiarCanciones(int indiceCancion1, int indiceCancion2) {
+
+        // Verificar que los índices estén dentro del rango válido
+        if (indiceCancion1 >= 0 && indiceCancion1 < contadorCanciones && indiceCancion2 >= 0 && indiceCancion2 < contadorCanciones) {
+            // Intercambiar las canciones de posición en el array
+            Cancion temp = playlist[indiceCancion1];
+
+            playlist[indiceCancion1] = playlist[indiceCancion2];
+
+            playlist[indiceCancion2] = temp;
+
+        } else {
+            
+            // Mostrar un mensaje de error si los índices son inválidos
+            System.err.println("Índices de canción inválidos.");
+            
+        }
+    }
+
 }

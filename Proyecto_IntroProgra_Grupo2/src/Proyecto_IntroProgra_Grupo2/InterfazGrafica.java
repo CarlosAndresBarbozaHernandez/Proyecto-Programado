@@ -218,8 +218,18 @@ public class InterfazGrafica extends javax.swing.JFrame {
         textoListaCanciones.setText("Lista Canciones");
 
         botonSubirCancion.setText("Subir Cancion");
+        botonSubirCancion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonSubirCancionActionPerformed(evt);
+            }
+        });
 
         botonBajarCancion.setText("Bajar Cancion");
+        botonBajarCancion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonBajarCancionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
         panelPrincipal.setLayout(panelPrincipalLayout);
@@ -634,6 +644,76 @@ public class InterfazGrafica extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción.", "Selección requerida", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_botonRetrocederCancionActionPerformed
+
+    private void botonSubirCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSubirCancionActionPerformed
+
+        // Obtener el índice de la canción seleccionada
+        int indiceCancion = jListCanciones.getSelectedIndex();
+        
+        // Obtener la playlist seleccionada
+        int indicePlaylist = jListPlaylistCreadas.getSelectedIndex();
+
+        if (indicePlaylist != -1 && indiceCancion != -1) {
+            
+            // Obtener la playlist correspondiente al índice seleccionado
+            Playlist playlistSeleccionada = playlists[indicePlaylist];
+            
+            // Verificar si la canción seleccionada no es la primera en la lista
+            if (indiceCancion > 0) {
+                
+                // Intercambiar la canción seleccionada con la anterior
+                playlistSeleccionada.intercambiarCanciones(indiceCancion, indiceCancion - 1);
+                
+                // Actualizar la lista de canciones en la interfaz gráfica
+                actualizarJListCanciones(playlistSeleccionada);
+                
+                // Seleccionar la canción que se movió
+                jListCanciones.setSelectedIndex(indiceCancion - 1);
+                
+            } else {
+                
+                // Mostrar un mensaje si la canción ya está en la primera posición
+                JOptionPane.showMessageDialog(null, "La canción ya está en la primera posición.");
+                
+            }
+        }
+
+    }//GEN-LAST:event_botonSubirCancionActionPerformed
+
+    private void botonBajarCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBajarCancionActionPerformed
+
+        // Obtener el índice de la canción seleccionada
+        int indiceCancion = jListCanciones.getSelectedIndex();
+        
+        // Obtener la playlist seleccionada
+        int indicePlaylist = jListPlaylistCreadas.getSelectedIndex();
+
+        if (indicePlaylist != -1 && indiceCancion != -1) {
+            
+            // Obtener la playlist correspondiente al índice seleccionado
+            Playlist playlistSeleccionada = playlists[indicePlaylist];
+            
+            // Verificar si la canción seleccionada no es la última en la lista
+            if (indiceCancion < playlistSeleccionada.getContadorCanciones() - 1) {
+                
+                // Intercambiar la canción seleccionada con la siguiente
+                playlistSeleccionada.intercambiarCanciones(indiceCancion, indiceCancion + 1);
+                
+                // Actualizar la lista de canciones en la interfaz gráfica
+                actualizarJListCanciones(playlistSeleccionada);
+                
+                // Seleccionar la canción que se movió
+                jListCanciones.setSelectedIndex(indiceCancion + 1);
+                
+            } else {
+                
+                // Mostrar un mensaje si la canción ya está en la última posición
+                JOptionPane.showMessageDialog(null, "La canción ya está en la última posición.");
+                
+            }
+        }
+
+    }//GEN-LAST:event_botonBajarCancionActionPerformed
 
     private void AgregarCancion(Playlist pPlaylist) {
 
