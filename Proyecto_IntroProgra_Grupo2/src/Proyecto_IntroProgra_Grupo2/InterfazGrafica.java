@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JList;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
@@ -22,7 +23,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
 
     private int contadorPlaylists = 0; // Contador de playlists creadas
     private Playlist playlistGeneral = new Playlist("Playlist General", 100);
-    private Playlist[] playlists = new Playlist[3]; // Array para almacenar las playlists creadas
+    private Playlist[] playlists; // Array para almacenar las playlists creadas
     private BasicPlayer player; // Cambio a BasicPlayer
     private boolean isPlaying = false;
 
@@ -35,10 +36,29 @@ public class InterfazGrafica extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked")
 
+    /*
     // Este método establece las playlists en la interfaz y actualiza la lista de playlists creadas.
-    public void setPlaylists(Playlist[] playlists) {
+    private void setPlaylists(Playlist[] playlists) {
         this.playlists = playlists; // Asigna el array de playlists recibido al atributo de la clase
         actualizarJListPlaylistCreadas(); // Llama al método para actualizar la lista de playlists en la interfaz
+    }
+    */
+
+    //Este metodo carga los playlist previamente creados.
+    private void CargarPlaylists() {
+        PersistenciaDatos leer = new PersistenciaDatos();
+
+        String rutaDefecto = System.getProperty("user.home") + File.separator + "playlists.txt";
+        Playlist[] tempPlaylist = leer.cargarPlaylists(rutaDefecto);
+
+        if (tempPlaylist != null) {
+            this.playlists = tempPlaylist;
+            this.contadorPlaylists = leer.contador;
+            actualizarJListPlaylistCreadas();
+        } else {
+            this.playlists = new Playlist[3];
+            actualizarJListPlaylistCreadas();
+        }
     }
 
 // Este método actualiza la lista de playlists creadas en la interfaz gráfica.
@@ -117,7 +137,12 @@ public class InterfazGrafica extends javax.swing.JFrame {
         botonSubirCancion = new javax.swing.JButton();
         botonBajarCancion = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         textoPlaylist.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         textoPlaylist.setText("Playlist General");
@@ -287,7 +312,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
                                         .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(botonSubirCancion)
                                             .addComponent(botonBajarCancion))
-                                        .addGap(0, 126, Short.MAX_VALUE))))))))
+                                        .addGap(0, 20, Short.MAX_VALUE))))))))
         );
         panelPrincipalLayout.setVerticalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,8 +358,9 @@ public class InterfazGrafica extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(panelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -475,8 +501,12 @@ public class InterfazGrafica extends javax.swing.JFrame {
                 aux = JOptionPane.showConfirmDialog(null, "Desea Agregar otra Cancion al Playlist?", "Agregar Cancion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             }
 
-            playlists[contadorPlaylists] = nuevaPlaylist; // Almacena la playlist en el array
-
+            for (int i = 0; i < playlists.length; i++) {
+                if (playlists[i] == null) {
+                    playlists[i] = nuevaPlaylist; // Almacena la playlist en el array
+                    break;
+                }
+            }
             contadorPlaylists++; // Incrementa el contador de playlists creadas
 
             actualizarJListPlaylistCreadas();
@@ -498,10 +528,12 @@ public class InterfazGrafica extends javax.swing.JFrame {
 
             if (playlistEliminar != null) {
                 playlists[indicePlaylist] = null;
-                actualizarJListPlaylistCreadas();
+                contadorPlaylists--; // Se disminuye el contador de playlists
+                String[] listaVacia = new String[1];
+                jListCanciones.setListData(listaVacia);
                 JOptionPane.showMessageDialog(null, "La playlist se eliminó correctamente.");
-
                 botonAgregarPlaylist.setEnabled(true);
+                actualizarJListPlaylistCreadas();
             } else {
 
                 JOptionPane.showMessageDialog(null, "La playlist seleccionada no existe.");
@@ -649,32 +681,32 @@ public class InterfazGrafica extends javax.swing.JFrame {
 
         // Obtener el índice de la canción seleccionada
         int indiceCancion = jListCanciones.getSelectedIndex();
-        
+
         // Obtener la playlist seleccionada
         int indicePlaylist = jListPlaylistCreadas.getSelectedIndex();
 
         if (indicePlaylist != -1 && indiceCancion != -1) {
-            
+
             // Obtener la playlist correspondiente al índice seleccionado
             Playlist playlistSeleccionada = playlists[indicePlaylist];
-            
+
             // Verificar si la canción seleccionada no es la primera en la lista
             if (indiceCancion > 0) {
-                
+
                 // Intercambiar la canción seleccionada con la anterior
                 playlistSeleccionada.intercambiarCanciones(indiceCancion, indiceCancion - 1);
-                
+
                 // Actualizar la lista de canciones en la interfaz gráfica
                 actualizarJListCanciones(playlistSeleccionada);
-                
+
                 // Seleccionar la canción que se movió
                 jListCanciones.setSelectedIndex(indiceCancion - 1);
-                
+
             } else {
-                
+
                 // Mostrar un mensaje si la canción ya está en la primera posición
                 JOptionPane.showMessageDialog(null, "La canción ya está en la primera posición.");
-                
+
             }
         }
 
@@ -684,36 +716,42 @@ public class InterfazGrafica extends javax.swing.JFrame {
 
         // Obtener el índice de la canción seleccionada
         int indiceCancion = jListCanciones.getSelectedIndex();
-        
+
         // Obtener la playlist seleccionada
         int indicePlaylist = jListPlaylistCreadas.getSelectedIndex();
 
         if (indicePlaylist != -1 && indiceCancion != -1) {
-            
+
             // Obtener la playlist correspondiente al índice seleccionado
             Playlist playlistSeleccionada = playlists[indicePlaylist];
-            
+
             // Verificar si la canción seleccionada no es la última en la lista
             if (indiceCancion < playlistSeleccionada.getContadorCanciones() - 1) {
-                
+
                 // Intercambiar la canción seleccionada con la siguiente
                 playlistSeleccionada.intercambiarCanciones(indiceCancion, indiceCancion + 1);
-                
+
                 // Actualizar la lista de canciones en la interfaz gráfica
                 actualizarJListCanciones(playlistSeleccionada);
-                
+
                 // Seleccionar la canción que se movió
                 jListCanciones.setSelectedIndex(indiceCancion + 1);
-                
+
             } else {
-                
+
                 // Mostrar un mensaje si la canción ya está en la última posición
                 JOptionPane.showMessageDialog(null, "La canción ya está en la última posición.");
-                
+
             }
         }
 
     }//GEN-LAST:event_botonBajarCancionActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        PersistenciaDatos guardar = new PersistenciaDatos();
+        String rutaDefecto = System.getProperty("user.home") + File.separator + "playlists.txt";
+        guardar.guardarPlaylists(this.playlists, rutaDefecto);
+    }//GEN-LAST:event_formWindowClosed
 
     private void AgregarCancion(Playlist pPlaylist) {
 
@@ -743,7 +781,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
                     duracion = archivoCancion.getAudioHeader().getTrackLength();
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.println(e);;
                 }
 
                 /*
@@ -821,9 +859,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
             public void run() {
 
                 InterfazGrafica interfaz = new InterfazGrafica();
-                // Crear las playlists que desees
-                Playlist[] playlists = new Playlist[3];
-                interfaz.setPlaylists(playlists); // Pasar el array de playlists a la interfaz
+                interfaz.CargarPlaylists(); // Se cargan los playlists del .txt
                 interfaz.setVisible(true);
 
             }

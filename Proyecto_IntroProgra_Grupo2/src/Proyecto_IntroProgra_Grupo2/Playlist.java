@@ -19,13 +19,22 @@ public class Playlist {
     private int contadorCanciones;
 
     // Constructor de la clase Playlist
-    public Playlist(String name, int maxSize) {
-        nombrePlaylist = name;
-        playlist = new Cancion[maxSize];
+    public Playlist(String pNombre, int pTamanno) {
+        nombrePlaylist = pNombre;
+        playlist = new Cancion[pTamanno];
         indice = 0;
         this.contadorCanciones = 0;
     }
 
+    public Playlist(String pNombre, int pIndice, int pContador, int pTamanno) {
+        this.nombrePlaylist = pNombre;
+        this.indice = pIndice;
+        this.contadorCanciones = pContador;
+        this.playlist = new Cancion [pTamanno];
+    }
+    
+    
+    
     // Getters and Setters
     public String getNombrePlaylist() {
         return nombrePlaylist;
