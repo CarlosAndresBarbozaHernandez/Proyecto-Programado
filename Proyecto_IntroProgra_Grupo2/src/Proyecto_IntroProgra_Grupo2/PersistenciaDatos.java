@@ -53,18 +53,20 @@ public class PersistenciaDatos {
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(pRutaArchivo));
-            String linea;
-            while ((linea = reader.readLine()) != null) {
+            String linea = reader.readLine();
+            while (linea != null) {
                 String[] infoPlaylist = linea.split(",");
                 Playlist playlist = new Playlist(infoPlaylist[0], Integer.parseInt(infoPlaylist[1]), Integer.parseInt(infoPlaylist[2]), 3);
+                int aux = playlist.getContadorCanciones();
+                while ((linea = reader.readLine()) != null && !linea.isEmpty() && aux != 0) {
 
-                while ((linea = reader.readLine()) != null && !linea.isEmpty()) {
                     String[] infoCancion = linea.split(",");
                     Cancion cancion = new Cancion(infoCancion[0], infoCancion[1], infoCancion[2], infoCancion[3], Integer.parseInt(infoCancion[4]));
 
                     for (int i = 0; i < playlist.getContadorCanciones(); i++) {
                         if (playlist.getPlaylist()[i] == null) {
                             playlist.getPlaylist()[i] = cancion;
+                            aux--;
                             break;
                         }
                     }

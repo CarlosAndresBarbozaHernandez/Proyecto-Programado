@@ -751,6 +751,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
         PersistenciaDatos guardar = new PersistenciaDatos();
         String rutaDefecto = System.getProperty("user.home") + File.separator + "playlists.txt";
         guardar.guardarPlaylists(this.playlists, rutaDefecto);
+        System.exit(0);
     }//GEN-LAST:event_formWindowClosed
 
     private void AgregarCancion(Playlist pPlaylist) {
