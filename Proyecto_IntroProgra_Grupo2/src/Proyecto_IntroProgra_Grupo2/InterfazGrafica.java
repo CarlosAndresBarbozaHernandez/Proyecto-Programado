@@ -6,7 +6,6 @@ import javax.swing.JOptionPane;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JList;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
@@ -22,7 +21,7 @@ import org.tritonus.share.sampled.file.TAudioFileFormat;
 public class InterfazGrafica extends javax.swing.JFrame {
 
     private int contadorPlaylists = 0; // Contador de playlists creadas
-    private Playlist playlistGeneral = new Playlist("Playlist General", 100);
+    private Playlist playlistGeneral = new Playlist("Playlist General", 10);
     private Playlist[] playlists; // Array para almacenar las playlists creadas
     private BasicPlayer player; // Cambio a BasicPlayer
     private boolean isPlaying = false;
@@ -42,8 +41,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
         this.playlists = playlists; // Asigna el array de playlists recibido al atributo de la clase
         actualizarJListPlaylistCreadas(); // Llama al método para actualizar la lista de playlists en la interfaz
     }
-    */
-
+     */
     //Este metodo carga los playlist previamente creados.
     private void CargarPlaylists() {
         PersistenciaDatos leer = new PersistenciaDatos();
@@ -113,6 +111,9 @@ public class InterfazGrafica extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrameBuscar = new javax.swing.JFrame();
+        jPanelBuscar = new javax.swing.JScrollPane();
+        jListBuscar = new javax.swing.JList<>();
         panelPrincipal = new javax.swing.JPanel();
         textoPlaylist = new javax.swing.JLabel();
         botonRetrocederCancion = new javax.swing.JButton();
@@ -125,8 +126,6 @@ public class InterfazGrafica extends javax.swing.JFrame {
         textoPlaylistCreadas = new javax.swing.JLabel();
         jTextFieldBarraDeBusqueda = new javax.swing.JTextField();
         botonBuscar = new javax.swing.JButton();
-        botonEliminarCancion = new javax.swing.JButton();
-        botonAgregarCancion = new javax.swing.JButton();
         botonEliminarPlaylist = new javax.swing.JButton();
         botonAgregarPlaylist = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -136,6 +135,31 @@ public class InterfazGrafica extends javax.swing.JFrame {
         textoListaCanciones = new javax.swing.JLabel();
         botonSubirCancion = new javax.swing.JButton();
         botonBajarCancion = new javax.swing.JButton();
+
+        jFrameBuscar.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jFrameBuscar.setTitle("Buscar");
+        jFrameBuscar.setAlwaysOnTop(true);
+        jFrameBuscar.setType(java.awt.Window.Type.POPUP);
+
+        jListBuscar.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jPanelBuscar.setViewportView(jListBuscar);
+
+        javax.swing.GroupLayout jFrameBuscarLayout = new javax.swing.GroupLayout(jFrameBuscar.getContentPane());
+        jFrameBuscar.getContentPane().setLayout(jFrameBuscarLayout);
+        jFrameBuscarLayout.setHorizontalGroup(
+            jFrameBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameBuscarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanelBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jFrameBuscarLayout.setVerticalGroup(
+            jFrameBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameBuscarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanelBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -168,11 +192,21 @@ public class InterfazGrafica extends javax.swing.JFrame {
             }
         });
 
+        jListPlaylist.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jListPlaylistFocusGained(evt);
+            }
+        });
         jScrollPane1.setViewportView(jListPlaylist);
 
         jListPlaylistCreadas.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 jListPlaylistCreadasComponentAdded(evt);
+            }
+        });
+        jListPlaylistCreadas.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jListPlaylistCreadasFocusGained(evt);
             }
         });
         jListPlaylistCreadas.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -186,25 +220,12 @@ public class InterfazGrafica extends javax.swing.JFrame {
         textoPlaylistCreadas.setText("Playlist Creadas");
 
         jTextFieldBarraDeBusqueda.setText("Barra de busqueda");
+        jTextFieldBarraDeBusqueda.setToolTipText("");
 
         botonBuscar.setText("Buscar");
         botonBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonBuscarActionPerformed(evt);
-            }
-        });
-
-        botonEliminarCancion.setText("Eliminar");
-        botonEliminarCancion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonEliminarCancionActionPerformed(evt);
-            }
-        });
-
-        botonAgregarCancion.setText("Agregar Cancion");
-        botonAgregarCancion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonAgregarCancionActionPerformed(evt);
             }
         });
 
@@ -260,59 +281,58 @@ public class InterfazGrafica extends javax.swing.JFrame {
         panelPrincipal.setLayout(panelPrincipalLayout);
         panelPrincipalLayout.setHorizontalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelPrincipalLayout.createSequentialGroup()
-                .addGap(19, 19, 19)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipalLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
                 .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelPrincipalLayout.createSequentialGroup()
-                        .addComponent(jTextFieldBarraDeBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(botonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelPrincipalLayout.createSequentialGroup()
+                        .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(panelPrincipalLayout.createSequentialGroup()
+                                .addGap(60, 60, 60)
+                                .addComponent(textoPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(textoPlaylistCreadas, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(65, 65, 65))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelPrincipalLayout.createSequentialGroup()
+                                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelPrincipalLayout.createSequentialGroup()
+                                        .addComponent(jTextFieldBarraDeBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(botonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelPrincipalLayout.createSequentialGroup()
+                                        .addGap(434, 434, 434)
+                                        .addComponent(botonAgregarPlaylist)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)))
                         .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelPrincipalLayout.createSequentialGroup()
-                                .addComponent(botonRetrocederCancion)
-                                .addGap(18, 18, 18)
-                                .addComponent(botonPausarReproducirCancion))
-                            .addComponent(textoPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelPrincipalLayout.createSequentialGroup()
-                                    .addComponent(botonEliminarCancion)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(botonAgregarCancion, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelPrincipalLayout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(botonSiguienteCancion)
-                                .addContainerGap())
+                                .addGap(31, 31, 31)
+                                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(panelPrincipalLayout.createSequentialGroup()
+                                        .addComponent(botonEliminarCancion2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(botonAgregarCancion2))
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(panelPrincipalLayout.createSequentialGroup()
-                                .addGap(69, 69, 69)
-                                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelPrincipalLayout.createSequentialGroup()
-                                        .addComponent(textoPlaylistCreadas, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(205, 205, 205)
-                                        .addComponent(textoListaCanciones, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(150, 150, 150))
-                                    .addGroup(panelPrincipalLayout.createSequentialGroup()
-                                        .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelPrincipalLayout.createSequentialGroup()
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(85, 85, 85)
-                                                .addComponent(jScrollPane3))
-                                            .addGroup(panelPrincipalLayout.createSequentialGroup()
-                                                .addComponent(botonEliminarPlaylist)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(botonAgregarPlaylist)
-                                                .addGap(85, 85, 85)
-                                                .addComponent(botonEliminarCancion2)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(botonAgregarCancion2)))
-                                        .addGap(46, 46, 46)
-                                        .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(botonSubirCancion)
-                                            .addComponent(botonBajarCancion))
-                                        .addGap(0, 20, Short.MAX_VALUE))))))))
+                                .addGap(88, 88, 88)
+                                .addComponent(textoListaCanciones, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(18, 18, 18)
+                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(botonSubirCancion)
+                    .addComponent(botonBajarCancion))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipalLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(botonEliminarPlaylist)
+                    .addComponent(botonRetrocederCancion))
+                .addGap(18, 18, 18)
+                .addComponent(botonPausarReproducirCancion)
+                .addGap(18, 18, 18)
+                .addComponent(botonSiguienteCancion)
+                .addGap(321, 321, 321))
         );
         panelPrincipalLayout.setVerticalGroup(
             panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -334,23 +354,22 @@ public class InterfazGrafica extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
                     .addGroup(panelPrincipalLayout.createSequentialGroup()
                         .addComponent(botonSubirCancion)
-                        .addGap(32, 32, 32)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(botonBajarCancion)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(botonEliminarCancion)
-                        .addComponent(botonEliminarPlaylist)
-                        .addComponent(botonAgregarPlaylist)
                         .addComponent(botonEliminarCancion2)
                         .addComponent(botonAgregarCancion2))
-                    .addComponent(botonAgregarCancion))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                    .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(botonEliminarPlaylist)
+                        .addComponent(botonAgregarPlaylist)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonRetrocederCancion)
                     .addComponent(botonPausarReproducirCancion)
                     .addComponent(botonSiguienteCancion))
-                .addGap(31, 31, 31))
+                .addGap(43, 43, 43))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -360,7 +379,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(100, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -454,33 +473,15 @@ public class InterfazGrafica extends javax.swing.JFrame {
     }//GEN-LAST:event_botonSiguienteCancionActionPerformed
 
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
-        String textoBusqueda = jTextFieldBarraDeBusqueda.getText();
+        String textoBusqueda = jTextFieldBarraDeBusqueda.getText().toLowerCase();
+        Buscar buscar = new Buscar();
+        boolean encontrado = buscar.cargarTable(textoBusqueda, playlistGeneral, playlists);
 
-        boolean encontrado = false;
-        for (Playlist playlist : playlists) {
-            if (playlist != null) {
-
-                if (playlist.getNombrePlaylist().equalsIgnoreCase(textoBusqueda)) {
-                    JOptionPane.showMessageDialog(null, "La lista de reproducción '" + playlist.getNombrePlaylist() + "' fue encontrada.");
-                    encontrado = true;
-                    break;
-                }
-
-                for (Cancion cancion : playlist.getPlaylist()) {
-                    if (cancion != null) {
-
-                        if (cancion.getNombre().equalsIgnoreCase(textoBusqueda) || cancion.getArtista().equalsIgnoreCase(textoBusqueda)) {
-                            JOptionPane.showMessageDialog(null, "La canción '" + cancion.getNombre() + "' fue encontrada en la playlist '" + playlist.getNombrePlaylist() + "'.");
-                            encontrado = true;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!encontrado) {
-            JOptionPane.showMessageDialog(null, "No se encontraron coincidencias para '" + textoBusqueda + "'.");
+        if (encontrado) {
+            buscar.setLocationRelativeTo(null);
+            buscar.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontraron coincidencias para '" + textoBusqueda + "'.", "Buscar", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_botonBuscarActionPerformed
 
@@ -543,51 +544,17 @@ public class InterfazGrafica extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonEliminarPlaylistActionPerformed
 
-    private void botonEliminarCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarCancionActionPerformed
-        // Obtener la playlist seleccionada
-        int indicePlaylist = jListPlaylistCreadas.getSelectedIndex();
-        // Obtener la canción seleccionada
-        int indiceCancion = jListCanciones.getSelectedIndex();
-        // Verificar si se seleccionó una playlist y una canción
-        if (indicePlaylist != -1 && indiceCancion != -1) {
-            // Obtener la playlist correspondiente al índice seleccionado
-            Playlist playlistSeleccionada = playlists[indicePlaylist];
-            // Obtener la canción seleccionada en la playlist
-            Cancion cancionEliminar = playlistSeleccionada.getPlaylist()[indiceCancion];
-            int contador = playlistSeleccionada.getContadorCanciones();
-            // Verificar si la canción existe en la playlist
-            if (cancionEliminar != null) {
-                // Eliminar la canción de la playlist
-                playlistSeleccionada.getPlaylist()[indiceCancion] = null;
-                // Actualizar la lista de canciones en la interfaz
-                actualizarJListCanciones(playlistSeleccionada);
-                // Mostrar un mensaje de éxito
-                JOptionPane.showMessageDialog(null, "La canción se eliminó correctamente de la playlist.");
-                contador--;
-                playlistSeleccionada.setContadorCanciones(contador);
-            } else {
-                // Mostrar un mensaje de error si no se encontró la canción
-                JOptionPane.showMessageDialog(null, "La canción seleccionada no existe en la playlist.");
-            }
-        } else {
-            // Mostrar un mensaje si no se seleccionó ninguna playlist o canción
-            JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción para eliminar.");
-        }
-    }//GEN-LAST:event_botonEliminarCancionActionPerformed
-
-    private void botonAgregarCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarCancionActionPerformed
-
-        this.AgregarCancion(this.playlistGeneral);
-        this.actualizarJListPlaylist();
-
-    }//GEN-LAST:event_botonAgregarCancionActionPerformed
-
     private void botonAgregarCancion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarCancion2ActionPerformed
 
         int index = jListPlaylistCreadas.getSelectedIndex();
-        this.AgregarCancion(playlists[index]);
-        this.actualizarJListCanciones(playlists[index]);
 
+        if (index != -1) {
+            this.AgregarCancion(playlists[index]);
+            this.actualizarJListCanciones(playlists[index]);
+        } else {
+            this.AgregarCancion(this.playlistGeneral);
+            this.actualizarJListPlaylist();
+        }
     }//GEN-LAST:event_botonAgregarCancion2ActionPerformed
 
     private void botonEliminarCancion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarCancion2ActionPerformed
@@ -595,6 +562,7 @@ public class InterfazGrafica extends javax.swing.JFrame {
         int indicePlaylist = jListPlaylistCreadas.getSelectedIndex();
         // Obtener la canción seleccionada
         int indiceCancion = jListCanciones.getSelectedIndex();
+        int indiceGeneral = jListPlaylist.getSelectedIndex();
         // Verificar si se seleccionó una playlist y una canción
         if (indicePlaylist != -1 && indiceCancion != -1) {
             // Obtener la playlist correspondiente al índice seleccionado
@@ -604,21 +572,36 @@ public class InterfazGrafica extends javax.swing.JFrame {
             int contador = playlistSeleccionada.getContadorCanciones();
             // Verificar si la canción existe en la playlist
             if (cancionEliminar != null) {
-                // Eliminar la canción de la playlist
-                playlistSeleccionada.getPlaylist()[indiceCancion] = null;
-                // Actualizar la lista de canciones en la interfaz
-                actualizarJListCanciones(playlistSeleccionada);
-                // Mostrar un mensaje de éxito
-                JOptionPane.showMessageDialog(null, "La canción se eliminó correctamente de la playlist.");
-                contador--;
-                playlistSeleccionada.setContadorCanciones(contador);
+                int respuesta = JOptionPane.showConfirmDialog(null, "Esta seguro que desea eliminar la cancion:\n\n" + jListCanciones.getSelectedValue() + "\n\ndel playlist "
+                        + jListPlaylistCreadas.getSelectedValue(), "Eliminar Cancion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (respuesta == JOptionPane.YES_OPTION) {
+                    // Eliminar la canción de la playlist
+                    playlistSeleccionada.getPlaylist()[indiceCancion] = null;
+                    // Actualizar la lista de canciones en la interfaz
+                    actualizarJListCanciones(playlistSeleccionada);
+                    // Mostrar un mensaje de éxito
+                    JOptionPane.showMessageDialog(null, "La canción se eliminó correctamente de la playlist.", "Eliminar Cancion", JOptionPane.INFORMATION_MESSAGE);
+                    contador--;
+                    playlistSeleccionada.setContadorCanciones(contador);
+                }
             } else {
                 // Mostrar un mensaje de error si no se encontró la canción
-                JOptionPane.showMessageDialog(null, "La canción seleccionada no existe en la playlist.");
+                JOptionPane.showMessageDialog(null, "La canción seleccionada no existe en la playlist.", "Eliminar Cancion", JOptionPane.WARNING_MESSAGE);
+            }
+        } else if (indicePlaylist == -1 && indiceGeneral != -1) {  //Si no hay un playlist y una cancion seleccionada, se elimina la cancion del playlist general.
+            int respuesta = JOptionPane.showConfirmDialog(null, "Esta seguro que desea eliminar la cancion:\n\n" + jListPlaylist.getSelectedValue() + "\n\ndel playlist general?",
+                    "Eliminar Cancion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (respuesta == JOptionPane.YES_OPTION) {
+                int contador = playlistGeneral.getContadorCanciones();
+                playlistGeneral.getPlaylist()[indiceGeneral] = null;
+                contador--;
+                playlistGeneral.setContadorCanciones(contador);
+                this.actualizarJListPlaylist();
+                JOptionPane.showMessageDialog(null, "La canción se eliminó correctamente de la playlist.", "Eliminar Cancion", JOptionPane.INFORMATION_MESSAGE);
             }
         } else {
             // Mostrar un mensaje si no se seleccionó ninguna playlist o canción
-            JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción para eliminar.");
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una playlist y una canción para eliminar.", "Eliminar Cancion", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_botonEliminarCancion2ActionPerformed
 
@@ -632,9 +615,10 @@ public class InterfazGrafica extends javax.swing.JFrame {
     private void jListPlaylistCreadasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListPlaylistCreadasValueChanged
 
         int index = jListPlaylistCreadas.getSelectedIndex();
-        this.actualizarJListCanciones(playlists[index]);
-        jListCanciones.setSelectedIndex(0);
-
+        if (index != -1) {
+            this.actualizarJListCanciones(playlists[index]);
+            jListCanciones.setSelectedIndex(0);
+        }
     }//GEN-LAST:event_jListPlaylistCreadasValueChanged
 
     private void botonRetrocederCancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetrocederCancionActionPerformed
@@ -754,6 +738,16 @@ public class InterfazGrafica extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_formWindowClosed
 
+    private void jListPlaylistFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jListPlaylistFocusGained
+        jListCanciones.setListData(new String[0]);
+        jListPlaylistCreadas.clearSelection();
+        jListCanciones.clearSelection();
+    }//GEN-LAST:event_jListPlaylistFocusGained
+
+    private void jListPlaylistCreadasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jListPlaylistCreadasFocusGained
+        jListPlaylist.clearSelection();
+    }//GEN-LAST:event_jListPlaylistCreadasFocusGained
+
     private void AgregarCancion(Playlist pPlaylist) {
 
         if (pPlaylist.getContadorCanciones() < pPlaylist.getPlaylist().length) {// Se valida si en el playlist hay espacios para nuevas canciones.
@@ -868,21 +862,22 @@ public class InterfazGrafica extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton botonAgregarCancion;
     private javax.swing.JButton botonAgregarCancion2;
     private javax.swing.JButton botonAgregarPlaylist;
     private javax.swing.JButton botonBajarCancion;
     private javax.swing.JButton botonBuscar;
-    private javax.swing.JButton botonEliminarCancion;
     private javax.swing.JButton botonEliminarCancion2;
     private javax.swing.JButton botonEliminarPlaylist;
     private javax.swing.JButton botonPausarReproducirCancion;
     private javax.swing.JButton botonRetrocederCancion;
     private javax.swing.JButton botonSiguienteCancion;
     private javax.swing.JButton botonSubirCancion;
+    private javax.swing.JFrame jFrameBuscar;
+    private javax.swing.JList<String> jListBuscar;
     private javax.swing.JList<String> jListCanciones;
     private javax.swing.JList<String> jListPlaylist;
     private javax.swing.JList<String> jListPlaylistCreadas;
+    private javax.swing.JScrollPane jPanelBuscar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
